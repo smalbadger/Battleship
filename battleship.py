@@ -188,48 +188,93 @@ def computersturn(compturn):
         else:
             ###########   STRATEGIC PLAY   #############
             n=0
-            newcoord = [0,0]
+            newcoord = [0,1]
             for i in range(10):
                 for j in range(10):
                     if playlayover[i][j] != "miss" and playlayover[i][j] != 0:
                         if i<9:
                             if playlayover[i+1][j] == 0:
-                                #newcoord = [i+1,j]
                                 newcoord = [j,i+1]
-                                break
-                        elif i>1:
-                            if playlayover[i-1][j] == 0:
-                                #newcoord = [i-1,j]
-                                newcoord = [j,i-1]
-                                break
-                        elif j<9:
-                            if playlayover[i][j+1] == 0:
-                                #newcoord = [i,j+1]
-                                newcoord = [j+1,i]
-                                break
-                        elif j>1:
-                            if playlayover[i][j-1] == 0:
-                                #newcoord = [i,j-1]
-                                newcoord = [j-1,i]
-                                break
+                                alpha = ord("a") + newcoord[0]
+                                alpha = chr(alpha)
+                                n = alpha + str(newcoord[1])
+                                if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
+                                    newcoord = [n[0], n[1]+n[2]]
+                                    print(newcoord, "(Calculated)")
 
+                                elif len(n)==2:
+                                    newcoord=list(n)
+                                    print(newcoord, "(Calculated)")
+                        if i>1 and not checkforvalidguess(playlayover, playersboard, newcoord):
+                            if playlayover[i-1][j] == 0:
+                                newcoord = [j,i-1]
+                                alpha = ord("a") + newcoord[0]
+                                alpha = chr(alpha)
+                                n = alpha + str(newcoord[1])
+                                if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
+                                    newcoord = [n[0], n[1]+n[2]]
+                                    print(newcoord, "(Calculated)")
+
+                                elif len(n)==2:
+                                    newcoord=list(n)
+                                    print(newcoord, "(Calculated)")
+                        if j<9 and not checkforvalidguess(playlayover, playersboard, newcoord):
+                            if playlayover[i][j+1] == 0:
+                                newcoord = [j+1,i]
+                                alpha = ord("a") + newcoord[0]
+                                alpha = chr(alpha)
+                                n = alpha + str(newcoord[1])
+                                if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
+                                    newcoord = [n[0], n[1]+n[2]]
+                                    print(newcoord, "(Calculated)")
+
+                                elif len(n)==2:
+                                    newcoord=list(n)
+                                    print(newcoord, "(Calculated)")
+                        if j>1 and not checkforvalidguess(playlayover, playersboard, newcoord):
+                            if playlayover[i][j-1] == 0:
+                                newcoord = [j-1,i]
+                                alpha = ord("a") + newcoord[0]
+                                alpha = chr(alpha)
+                                n = alpha + str(newcoord[1])
+                                if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
+                                    newcoord = [n[0], n[1]+n[2]]
+                                    print(newcoord, "(Calculated)")
+
+                                elif len(n)==2:
+                                    newcoord=list(n)
+                                    print(newcoord, "(Calculated)")
+        #only first turn
         if n != 0:
             if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
                 newcoord = [n[0], n[1]+n[2]]
+                print(newcoord, "(random)")
 
             elif len(n)==2:
                 newcoord=list(n)
+                print(newcoord, "(random)")
         else:
-            n = str(newcoord[0])+str(newcoord[1])
+            alpha = ord("a") + newcoord[0]
+            alpha = chr(alpha)
+            n = alpha + str(newcoord[1])
+            if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
+                newcoord = [n[0], n[1]+n[2]]
+                print(newcoord, "(Calculated)")
+
+            elif len(n)==2:
+                newcoord=list(n)
+                print(newcoord, "(Calculated)")
         while n[0] not in columns or not checkforvalidguess(playlayover, playersboard, newcoord) or len(n)!=2 or  n[1] not in rows:
             if len(n) == 3 and n[0] in columns and n[1] == "1" and n[2] == "0":
                 newcoord = [n[0], n[1]+n[2]]
+                #print(newcoord, "(retry)")
                 break
-            n = columns[random.randrange(0,10)]+str(random.randrange(0,10))
-            if len(n)==2:
+            n = columns[random.randrange(0,10)]+str(random.randrange(1,11))
+            if len(n)==2 and n[1]!=0:
                 newcoord=list(n)
+                print(newcoord, "(retry)")
         guesses[k-1]=newcoord
-    print(guesses)
+    print("\n",guesses)
     drawguesses(playlayover, guesses, 1)
     checkforsink(playlayover, playsinklist)
 
@@ -331,7 +376,7 @@ while winner == -1:
         rows = "12345678910"
         newstr = str(i) + ". "
         n = input(newstr)
-
+        newcoord = ['a','1']
         while len(n)<2:
             n = input("Enter a valid coordinate: ")
 
